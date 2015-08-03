@@ -22,4 +22,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mocha", ">= 0.9.5"
   s.add_development_dependency "rake"
   s.add_development_dependency "minitest"
+
+  s.add_development_dependency "tapp"
+  s.add_development_dependency "pry"
+  s.add_development_dependency "pry-byebug"
+  s.add_development_dependency "m", "~> 1.3.1"
 end

@@ -30,3 +30,6 @@ module Whenever
     File.exists?(File.join(path, 'Gemfile'))
   end
 end
+
+require 'tapp'
+require 'pry'

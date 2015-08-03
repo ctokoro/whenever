@@ -3,3 +3,5 @@ pkg
 doc
 .*.sw[a-z]
 Gemfile.lock
+.bundle
+vendor/
