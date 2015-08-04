@@ -154,8 +154,7 @@ module Whenever
         output << "MAILTO=#{mailto}\n\n" if mailto != :default
 
         time_and_jobs.each do |time, jobs|
-          shortcut_jobs = []
-          regular_jobs = []
+          shortcut_jobs, regular_jobs = [], []
 
           jobs.each do |job|
             next unless output_all || roles.any? do |r|
