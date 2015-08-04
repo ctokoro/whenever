@@ -27,3 +27,16 @@ class OutputEnvTest < Whenever::TestCase
     assert_match "NILVAR=\"\"", @output
   end
 end
+
+class OutputMailtoTest < Whenever::TestCase
+  setup do
+    @output = Whenever.cron \
+    <<-file
+      mailto "anyone@example.com"
+    file
+  end
+
+  should "output MAILTO environment variable" do
+    assert_match "MAILTO=anyone@example.com", @output
+  end
+end
