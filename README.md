@@ -103,7 +103,7 @@ You can specify `MAILTO` environment variable, which is recipient address of the
 For example:
 
 ```ruby
-mailto 'output_of_cron@example.com'
+set_mailto 'output_of_cron@example.com'
 
 every 3.hours do
   command "/usr/bin/my_great_command"

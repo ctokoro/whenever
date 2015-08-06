@@ -44,8 +44,8 @@ module Whenever
       yield
     end
 
-    # syntax sugar of mailto
-    def mailto(value)
+    # actually this is syntax sugar
+    def set_mailto(value)
       env('MAILTO', value)
     end
 

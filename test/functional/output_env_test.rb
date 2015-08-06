@@ -32,7 +32,7 @@ class OutputMailtoTest < Whenever::TestCase
   setup do
     @output = Whenever.cron \
     <<-file
-      mailto "anyone@example.com"
+      set_mailto "anyone@example.com"
     file
   end
 
