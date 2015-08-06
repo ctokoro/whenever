@@ -1,5 +1,11 @@
 require 'test_helper'
 
+class ExtendedString < String
+  def without_empty_lines
+    @without_empty_lines ||= self.lines.map{|line| line.chomp }.reject{|line| line.empty? }
+  end
+end
+
 class OutputJobsWithMailtoTest < Whenever::TestCase
   test "defined job with a mailto argument" do
     output = ExtendedString.new Whenever.cron \
