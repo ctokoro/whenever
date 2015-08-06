@@ -110,7 +110,7 @@ every 3.hours do
 end
 ```
 
-If you want to specify MAILTO per jobs, you can specify as below ways.
+If you want to change `MAILTO` per jobs, you can specify as below ways.
 
 ```ruby
 every 3.hours do
