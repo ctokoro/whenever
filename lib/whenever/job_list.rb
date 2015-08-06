@@ -55,7 +55,7 @@ module Whenever
           options = { :task => task, :template => template }
           options.merge!(args[0]) if args[0].is_a? Hash
 
-          options[:mailto] ||= @options.fetch(:mailto, nil) || :default
+          options[:mailto] ||= @options.fetch(:mailto, :default)
 
           # :cron_log was an old option for output redirection, it remains for backwards compatibility
           options[:output] = (options[:cron_log] || @cron_log) if defined?(@cron_log) || options.has_key?(:cron_log)
