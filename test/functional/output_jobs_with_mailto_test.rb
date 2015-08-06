@@ -9,8 +9,8 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
       end
     file
 
-    assert_equal 'MAILTO=someone@example.com', output.without_empty_lines[0]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines[1]
+    assert_equal 'MAILTO=someone@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
   end
 
   test "defined job with every method's block and a mailto argument" do
@@ -21,8 +21,8 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
       end
     file
 
-    assert_equal 'MAILTO=someone@example.com', output.without_empty_lines[0]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines[1]
+    assert_equal 'MAILTO=someone@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
   end
 
   test "defined job which overrided mailto argument in the block" do
@@ -33,13 +33,17 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
       end
     file
 
-    assert_equal 'MAILTO=overrided_in_the_block@example.com', output.without_empty_lines[0]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines[1]
+    assert_equal 'MAILTO=overrided_in_the_block@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
   end
 
   test "defined some jobs with various mailto argument" do
     output = ExtendedString.new Whenever.cron \
     <<-file
+      every 2.hours do
+        command "blahblah"
+      end
+
       every 2.hours, mailto: 'john@example.com' do
         command "blahblah_of_john"
         command "blahblah2_of_john"
@@ -50,24 +54,31 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
       end
 
       every 2.hours do
-        command "blahblah2_of_sarah", mailto: 'sarah@example.com'
         command "blahblah_of_martin", mailto: 'martin@example.com'
+        command "blahblah2_of_sarah", mailto: 'sarah@example.com'
+      end
+
+      every 2.hours do
+        command "blahblah2"
       end
     file
 
-    assert_equal 'MAILTO=john@example.com', output.without_empty_lines[0]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_john'", output.without_empty_lines[1]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah2_of_john'", output.without_empty_lines[2]
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah2'", output.without_empty_lines.shift
 
-    assert_equal 'MAILTO=sarah@example.com', output.without_empty_lines[3]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_sarah'", output.without_empty_lines[4]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah2_of_sarah'", output.without_empty_lines[5]
+    assert_equal 'MAILTO=john@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_john'", output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah2_of_john'", output.without_empty_lines.shift
 
-    assert_equal 'MAILTO=martin@example.com', output.without_empty_lines[6]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_martin'", output.without_empty_lines[7]
+    assert_equal 'MAILTO=sarah@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_sarah'", output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah2_of_sarah'", output.without_empty_lines.shift
+
+    assert_equal 'MAILTO=martin@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_martin'", output.without_empty_lines.shift
   end
 
-  test "defined some jobs with environment mailto define" do
+  test "defined some jobs with environment mailto define and various mailto argument" do
     output = ExtendedString.new Whenever.cron \
     <<-file
       mailto 'default@example.com'
@@ -89,14 +100,14 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
       end
     file
 
-    assert_equal 'MAILTO=default@example.com', output.without_empty_lines[0]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines[1]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah2'", output.without_empty_lines[2]
+    assert_equal 'MAILTO=default@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah2'", output.without_empty_lines.shift
 
-    assert_equal 'MAILTO=sarah@example.com', output.without_empty_lines[3]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah_by_sarah'", output.without_empty_lines[4]
+    assert_equal 'MAILTO=sarah@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_by_sarah'", output.without_empty_lines.shift
 
-    assert_equal 'MAILTO=john@example.com', output.without_empty_lines[5]
-    assert_equal two_hours + " /bin/bash -l -c 'blahblah_by_john'", output.without_empty_lines[6]
+    assert_equal 'MAILTO=john@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_by_john'", output.without_empty_lines.shift
   end
 end

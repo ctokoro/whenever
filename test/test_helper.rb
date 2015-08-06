@@ -36,7 +36,7 @@ end
 
 class ExtendedString < String
   def without_empty_lines
-    self.lines.map{|line| line.chomp }.reject{|line| line.empty? }
+    @without_empty_lines ||= self.lines.map{|line| line.chomp }.reject{|line| line.empty? }
   end
 end
 
