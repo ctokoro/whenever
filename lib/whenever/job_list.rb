@@ -44,11 +44,6 @@ module Whenever
       yield
     end
 
-    # actually this is syntax sugar
-    def set_mailto(value)
-      env('MAILTO', value)
-    end
-
     def job_type(name, template)
       singleton_class_shim.class_eval do
         define_method(name) do |task, *args|

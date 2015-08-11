@@ -107,7 +107,7 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
   test "defined some jobs with environment mailto define and various mailto argument" do
     output = ExtendedString.new Whenever.cron \
     <<-file
-      set_mailto 'default@example.com'
+      env 'MAILTO', 'default@example.com'
 
       every 2.hours do
         command "blahblah"
@@ -142,7 +142,7 @@ class OutputJobsWithMailtoForRolesTest < Whenever::TestCase
   test "one role requested and specified on the job with mailto argument" do
     output = ExtendedString.new Whenever.cron roles: [:role1], :string => \
     <<-file
-      set_mailto 'default@example.com'
+      env 'MAILTO', 'default@example.com'
 
       every 2.hours, :roles => [:role1] do
         command "blahblah"
