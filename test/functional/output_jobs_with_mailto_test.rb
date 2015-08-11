@@ -84,6 +84,26 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
     assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_martin'", output.without_empty_lines.shift
   end
 
+  test "defined some jobs with no mailto argument jobs and mailto argument jobs(no mailto jobs should be first line of cron output" do
+    output = ExtendedString.new Whenever.cron \
+    <<-file
+      every 2.hours, mailto: 'john@example.com' do
+        command "blahblah_of_john"
+        command "blahblah2_of_john"
+      end
+
+      every 2.hours do
+        command "blahblah"
+      end
+    file
+
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
+
+    assert_equal 'MAILTO=john@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah_of_john'", output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah2_of_john'", output.without_empty_lines.shift
+  end
+
   test "defined some jobs with environment mailto define and various mailto argument" do
     output = ExtendedString.new Whenever.cron \
     <<-file

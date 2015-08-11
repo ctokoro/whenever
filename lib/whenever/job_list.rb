@@ -144,32 +144,43 @@ module Whenever
       entries.map { |entry| entry.join(' ') }
     end
 
+    def cron_jobs_of_time(time, jobs)
+      shortcut_jobs, regular_jobs = [], []
+
+      jobs.each do |job|
+        next unless roles.empty? || roles.any? do |r|
+          job.has_role?(r)
+        end
+        Whenever::Output::Cron.output(time, job) do |cron|
+          cron << "\n\n"
+
+          if cron[0,1] == "@"
+            shortcut_jobs << cron
+          else
+            regular_jobs << cron
+          end
+        end
+      end
+
+      shortcut_jobs.join + combine(regular_jobs).join
+    end
+
     def cron_jobs
       return if @jobs.empty?
 
       output = []
-      output_all = roles.empty?
+
+      @jobs.delete(:default){ Hash.new }.each do |time, jobs|
+        output << cron_jobs_of_time(time, jobs)
+      end
 
       @jobs.each do |mailto, time_and_jobs|
         output << "MAILTO=#{mailto}\n\n" if mailto != :default
 
         time_and_jobs.each do |time, jobs|
-          shortcut_jobs, regular_jobs = [], []
+          output << cron_jobs_of_time(time, jobs)
+        end
 
-          jobs.each do |job|
-            next unless output_all || roles.any? do |r|
-              job.has_role?(r)
-            end
-            Whenever::Output::Cron.output(time, job) do |cron|
-              cron << "\n\n"
-
-              if cron[0,1] == "@"
-                shortcut_jobs << cron
-              else
-                regular_jobs << cron
-              end
-            end
-          end
 
           output << shortcut_jobs.join + combine(regular_jobs).join
         end
