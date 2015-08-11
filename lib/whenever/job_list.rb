@@ -175,15 +175,16 @@ module Whenever
       end
 
       @jobs.each do |mailto, time_and_jobs|
-        output << "MAILTO=#{mailto}\n\n" if mailto != :default
+        output_jobs = []
 
         time_and_jobs.each do |time, jobs|
-          output << cron_jobs_of_time(time, jobs)
+          output_jobs << cron_jobs_of_time(time, jobs)
         end
 
+        output_jobs.reject!{|output_job| output_job.empty? }
 
-          output << shortcut_jobs.join + combine(regular_jobs).join
-        end
+        output << "MAILTO=#{mailto}\n\n" unless output_jobs.empty?
+        output << output_jobs
       end
 
       output.join

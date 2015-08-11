@@ -137,3 +137,24 @@ class OutputJobsWithMailtoTest < Whenever::TestCase
     assert_equal two_hours + " /bin/bash -l -c 'blahblah_by_john'", output.without_empty_lines.shift
   end
 end
+
+class OutputJobsWithMailtoForRolesTest < Whenever::TestCase
+  test "one role requested and specified on the job with mailto argument" do
+    output = ExtendedString.new Whenever.cron roles: [:role1], :string => \
+    <<-file
+      set_mailto 'default@example.com'
+
+      every 2.hours, :roles => [:role1] do
+        command "blahblah"
+      end
+
+      every 2.hours, mailto: 'sarah@example.com', :roles => [:role2] do
+        command "blahblah_by_sarah"
+      end
+    file
+
+    assert_equal 'MAILTO=default@example.com', output.without_empty_lines.shift
+    assert_equal two_hours + " /bin/bash -l -c 'blahblah'", output.without_empty_lines.shift
+    assert_equal nil, output.without_empty_lines.shift
+  end
+end
