@@ -8,7 +8,7 @@ module Whenever
       @options = options
       @at                               = options.delete(:at)
       @template                         = options.delete(:template)
-      @mailto                           = options.fetch(:mailto, :default)
+      @mailto                           = options.fetch(:mailto, :default_mailto)
       @job_template                     = options.delete(:job_template) || ":job"
       @roles                            = Array(options.delete(:roles))
       @options[:output]                 = options.has_key?(:output) ? Whenever::Output::Redirection.new(options[:output]).to_s : ''
