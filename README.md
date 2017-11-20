@@ -141,7 +141,7 @@ You can see a list of all available options here: <https://github.com/mojombo/ch
 
 ### Customize email recipient with the `MAILTO` environment variable
 
-Output from the jobs is sent to the email address configured in the `MAILTO` environment variable.
+Output from the jobs is sent to the email address configured in [the `MAILTO` environment variable](http://man7.org/linux/man-pages/man5/crontab.5.html).
 
 There are many ways to further configure the recipient.
 

@@ -14,7 +14,7 @@
 
 * Allow configuring an alternative schedule file in Capistrano. [Shinichi Okamoto](https://github.com/javan/whenever/pull/666)
 
-* Add customizing email recipient option with the MAILTO environment variable. [Chikahiro Tokoro](https://github.com/javan/whenever/pull/678)
+* Add customizing email recipient option with [the MAILTO environment variable](http://man7.org/linux/man-pages/man5/crontab.5.html). [Chikahiro Tokoro](https://github.com/javan/whenever/pull/678)
 
 ### 0.9.7 / June 14, 2016
 
